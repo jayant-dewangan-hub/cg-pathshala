@@ -1,4 +1,4 @@
-const API = 'http://localhost:5000/api';
+const API = 'https://cg-pathshala-production.up.railway.app/api';
 
 const allSubjects = {
   6:  { hindi: ['हिंदी','English','गणित','विज्ञान','सामाजिक विज्ञान','संस्कृत'], english: ['Hindi','English','Mathematics','Science','Social Science','Sanskrit'] },
