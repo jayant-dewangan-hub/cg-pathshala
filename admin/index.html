@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CG Pathshala — Admin Panel</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <span>📚</span>
+      <div>
+        <div class="header-title">CG Pathshala</div>
+        <div class="header-sub">Admin Panel</div>
+      </div>
+    </div>
+    <div class="header-stats" id="header-stats">
+      <div class="stat-pill">Loading...</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-title">Menu</div>
+      <div class="sidebar-item active" onclick="showTab('add')">➕ Content Add करो</div>
+      <div class="sidebar-item" onclick="showTab('list')">📋 Content List</div>
+      <div class="sidebar-item" onclick="showTab('mcq')">✅ MCQ Add करो</div>
+    </div>
+
+    <!-- CONTENT AREA -->
+    <div class="content-area">
+
+      <!-- TAB 1: ADD CONTENT -->
+      <div class="tab active" id="tab-add">
+        <div class="card">
+          <h2>➕ नया Content Add करो</h2>
+
+          <div class="form-grid">
+            <!-- Medium -->
+            <div class="form-group">
+              <label>माध्यम / Medium *</label>
+              <select id="f-medium">
+                <option value="hindi">हिंदी माध्यम</option>
+                <option value="english">English Medium</option>
+              </select>
+            </div>
+
+            <!-- Class -->
+            <div class="form-group">
+              <label>कक्षा / Class *</label>
+              <select id="f-class" onchange="updateSubjects()">
+                <option value="">-- चुनें --</option>
+                <option value="6">कक्षा 6</option>
+                <option value="7">कक्षा 7</option>
+                <option value="8">कक्षा 8</option>
+                <option value="9">कक्षा 9</option>
+                <option value="10">कक्षा 10</option>
+                <option value="11">कक्षा 11</option>
+                <option value="12">कक्षा 12</option>
+              </select>
+            </div>
+
+            <!-- Stream (11/12 only) -->
+            <div class="form-group" id="stream-group" style="display:none">
+              <label>Stream *</label>
+              <select id="f-stream" onchange="updateSubjects()">
+                <option value="">-- चुनें --</option>
+                <option value="science">Science</option>
+                <option value="commerce">Commerce</option>
+                <option value="arts">Arts</option>
+                <option value="agriculture">Agriculture</option>
+              </select>
+            </div>
+
+            <!-- Subject -->
+            <div class="form-group">
+              <label>विषय / Subject *</label>
+              <select id="f-subject">
+                <option value="">-- पहले Class चुनें --</option>
+              </select>
+            </div>
+
+            <!-- Content Type -->
+            <div class="form-group">
+              <label>Content Type *</label>
+              <select id="f-type" onchange="updateFormFields()">
+                <option value="notes">📝 Notes</option>
+                <option value="pdf">📄 PDF Book</option>
+                <option value="pyq">📋 PYQ Paper</option>
+                <option value="mcq">✅ MCQ</option>
+                <option value="video">▶️ Video Solution</option>
+                <option value="imp">⭐ Imp Questions</option>
+              </select>
+            </div>
+
+            <!-- Chapter Number -->
+            <div class="form-group">
+              <label>अध्याय नं / Chapter No *</label>
+              <input type="number" id="f-chapter" placeholder="जैसे: 1" min="1">
+            </div>
+
+            <!-- Chapter Name -->
+            <div class="form-group full-width">
+              <label>अध्याय का नाम / Chapter Name *</label>
+              <input type="text" id="f-chapter-name" placeholder="जैसे: प्रकाश का परावर्तन">
+            </div>
+
+            <!-- Title -->
+            <div class="form-group full-width">
+              <label>Title *</label>
+              <input type="text" id="f-title" placeholder="जैसे: Chapter 1 Notes">
+            </div>
+
+            <!-- Dynamic Fields -->
+            <div class="form-group full-width" id="field-content">
+              <label>Content / Notes</label>
+              <textarea id="f-content" rows="4" placeholder="यहाँ notes लिखो..."></textarea>
+            </div>
+
+            <div class="form-group full-width" id="field-video" style="display:none">
+              <label>YouTube Video URL</label>
+              <input type="text" id="f-video" placeholder="https://youtube.com/watch?v=...">
+            </div>
+
+            <div class="form-group full-width" id="field-pdf" style="display:none">
+              <label>PDF URL / Link</label>
+              <input type="text" id="f-pdf" placeholder="https://...">
+            </div>
+
+          </div>
+
+          <button class="btn-primary" onclick="addContent()">✅ Content Save करो</button>
+          <div id="add-msg" class="msg" style="display:none"></div>
+        </div>
+      </div>
+
+      <!-- TAB 2: CONTENT LIST -->
+      <div class="tab" id="tab-list">
+        <div class="card">
+          <h2>📋 Content List</h2>
+
+          <!-- Filters -->
+          <div class="filter-row">
+            <select id="filter-class" onchange="loadContentList()">
+              <option value="">सभी Classes</option>
+              <option value="6">Class 6</option>
+              <option value="7">Class 7</option>
+              <option value="8">Class 8</option>
+              <option value="9">Class 9</option>
+              <option value="10">Class 10</option>
+              <option value="11">Class 11</option>
+              <option value="12">Class 12</option>
+            </select>
+            <select id="filter-type" onchange="loadContentList()">
+              <option value="">सभी Types</option>
+              <option value="notes">Notes</option>
+              <option value="pdf">PDF</option>
+              <option value="pyq">PYQ</option>
+              <option value="mcq">MCQ</option>
+              <option value="video">Video</option>
+              <option value="imp">Imp Questions</option>
+            </select>
+            <button class="btn-secondary" onclick="loadContentList()">🔄 Refresh</button>
+          </div>
+
+          <div id="content-list">
+            <p style="color:#999;text-align:center;padding:30px">पहले filter चुनो या Refresh दबाओ</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: MCQ ADD -->
+      <div class="tab" id="tab-mcq">
+        <div class="card">
+          <h2>✅ MCQ Add करो</h2>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Medium *</label>
+              <select id="mcq-medium">
+                <option value="hindi">हिंदी माध्यम</option>
+                <option value="english">English Medium</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Class *</label>
+              <select id="mcq-class" onchange="updateMcqSubjects()">
+                <option value="">-- चुनें --</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
+            </div>
+            <div class="form-group" id="mcq-stream-group" style="display:none">
+              <label>Stream *</label>
+              <select id="mcq-stream" onchange="updateMcqSubjects()">
+                <option value="">-- चुनें --</option>
+                <option value="science">Science</option>
+                <option value="commerce">Commerce</option>
+                <option value="arts">Arts</option>
+                <option value="agriculture">Agriculture</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Subject *</label>
+              <select id="mcq-subject">
+                <option value="">-- पहले Class चुनें --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Chapter No *</label>
+              <input type="number" id="mcq-chapter" placeholder="1" min="1">
+            </div>
+            <div class="form-group">
+              <label>Chapter Name *</label>
+              <input type="text" id="mcq-chapter-name" placeholder="Chapter का नाम">
+            </div>
+            <div class="form-group full-width">
+              <label>Question *</label>
+              <input type="text" id="mcq-question" placeholder="यहाँ question लिखो">
+            </div>
+            <div class="form-group full-width">
+              <label>Option A *</label>
+              <input type="text" id="mcq-opt-a" placeholder="Option A">
+            </div>
+            <div class="form-group full-width">
+              <label>Option B *</label>
+              <input type="text" id="mcq-opt-b" placeholder="Option B">
+            </div>
+            <div class="form-group full-width">
+              <label>Option C *</label>
+              <input type="text" id="mcq-opt-c" placeholder="Option C">
+            </div>
+            <div class="form-group full-width">
+              <label>Option D *</label>
+              <input type="text" id="mcq-opt-d" placeholder="Option D">
+            </div>
+            <div class="form-group full-width">
+              <label>सही Answer *</label>
+              <select id="mcq-correct">
+                <option value="0">Option A</option>
+                <option value="1">Option B</option>
+                <option value="2">Option C</option>
+                <option value="3">Option D</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="addMCQ()">✅ MCQ Save करो</button>
+          <div id="mcq-msg" class="msg" style="display:none"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

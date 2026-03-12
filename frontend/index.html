@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CG Pathshala</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- SCREEN 1: MEDIUM SELECT -->
+  <div class="screen active" id="medium-screen">
+    <div class="medium-page">
+      <div class="medium-logo">📚</div>
+      <h1 class="medium-app-name">CG Pathshala</h1>
+      <p class="medium-tagline">CG Board की सबसे अच्छी study app</p>
+      <div class="medium-select-title">अपना माध्यम चुनें</div>
+      <div class="medium-grid">
+        <div class="medium-card" onclick="chooseMedium('hindi')">
+          <div class="medium-card-icon">🇮🇳</div>
+          <div class="medium-card-name">हिंदी माध्यम</div>
+          <div class="medium-card-sub">Hindi Medium</div>
+        </div>
+        <div class="medium-card" onclick="chooseMedium('english')">
+          <div class="medium-card-icon">🔤</div>
+          <div class="medium-card-name">English Medium</div>
+          <div class="medium-card-sub">अंग्रेजी माध्यम</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header" id="main-header" style="display:none">
+    <h1 id="header-title">📚 CG Pathshala</h1>
+    <p id="header-sub">CG Board | कक्षा 6 से 12 तक</p>
+    <div class="header-search" onclick="openSearch()">
+      <span>🔍</span>
+      <span id="txt-search-placeholder">कोई भी topic खोजें...</span>
+    </div>
+  </div>
+
+  <!-- SEARCH SCREEN -->
+  <div class="screen" id="search-screen">
+    <div class="container">
+      <button class="back-btn-red" onclick="goBack('search')">← <span id="txt-back-search">वापस</span></button>
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="कोई भी topic खोजें..." oninput="doSearch(this.value)">
+        <button class="search-clear" onclick="clearSearch()">✕</button>
+      </div>
+      <div id="search-results">
+        <div class="search-empty">
+          <span>🔍</span>
+          <p id="txt-search-hint">कुछ भी type करो...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: CLASS SELECT -->
+  <div class="screen" id="home-screen">
+    <div class="container">
+      <h2 id="txt-select-class">अपनी कक्षा चुनें</h2>
+      <div class="class-grid" id="class-grid"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: STREAM SELECT -->
+  <div class="screen" id="stream-screen">
+    <div class="container">
+      <button class="back-btn-red" onclick="goBack('stream')">← <span id="txt-back-stream">वापस</span></button>
+      <h2 id="stream-title">Stream चुनें</h2>
+      <div class="stream-grid" id="stream-grid"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: SUBJECT SELECT -->
+  <div class="screen" id="subject-screen">
+    <div class="container">
+      <button class="back-btn-red" onclick="goBack('subject')">← <span id="txt-back-subject">वापस</span></button>
+      <h2 id="subject-title">विषय चुनें</h2>
+      <div class="subject-grid" id="subject-grid"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 5: CONTENT TYPE SELECT -->
+  <div class="screen" id="content-screen">
+    <div class="container">
+      <button class="back-btn-red" onclick="goBack('content')">← <span id="txt-back-content">वापस</span></button>
+      <div class="subject-info-card" id="subject-info-card"></div>
+      <h2 id="txt-what-to-read">क्या पढ़ना है?</h2>
+      <div class="content-grid" id="content-grid"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 6: SECTION/LIST -->
+  <div class="screen" id="section-screen">
+    <div class="container">
+      <button class="back-btn-red" onclick="goBack('section')">← <span id="txt-back-section">वापस</span></button>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px">
+        <h2 id="section-title">Section</h2>
+      </div>
+      <div id="content-list"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 7: BOOKMARK -->
+  <div class="screen" id="bookmark-screen">
+    <div class="container">
+      <h2 id="txt-bookmark-title">🔖 Saved Content</h2>
+      <div class="bookmark-tabs" id="bookmark-tabs">
+        <button class="bm-tab active" onclick="filterBookmarks('all')" id="bm-all">सभी</button>
+        <button class="bm-tab" onclick="filterBookmarks('notes')" id="bm-notes">📝 Notes</button>
+        <button class="bm-tab" onclick="filterBookmarks('pdf')" id="bm-pdf">📄 PDF</button>
+        <button class="bm-tab" onclick="filterBookmarks('pyq')" id="bm-pyq">📋 PYQ</button>
+        <button class="bm-tab" onclick="filterBookmarks('mcq')" id="bm-mcq">✅ MCQ</button>
+        <button class="bm-tab" onclick="filterBookmarks('video')" id="bm-video">▶️ Video</button>
+        <button class="bm-tab" onclick="filterBookmarks('imp')" id="bm-imp">⭐ Imp</button>
+      </div>
+      <div id="bookmark-list"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 8: PROFILE -->
+  <div class="screen" id="profile-screen">
+    <div class="container">
+      <h2 id="txt-profile-title">👤 प्रोफाइल</h2>
+
+      <div class="profile-card">
+        <div class="profile-avatar">🎓</div>
+        <div class="profile-info">
+          <div class="profile-name" id="profile-name-display">Student</div>
+          <div class="profile-detail" id="profile-class-display">कक्षा चुनें</div>
+        </div>
+        <button class="profile-edit-btn" onclick="openEditProfile()" id="txt-edit">✏️ Edit</button>
+      </div>
+
+      <div class="profile-stats">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-saved">0</div>
+          <div class="stat-label" id="txt-stat-saved">Saved</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-medium">-</div>
+          <div class="stat-label" id="txt-stat-medium">Medium</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-class">-</div>
+          <div class="stat-label" id="txt-stat-class">Class</div>
+        </div>
+      </div>
+
+      <div class="section-title-plain" id="txt-settings">⚙️ Settings</div>
+
+      <div class="settings-list">
+        <div class="settings-item">
+          <span class="settings-icon">🌙</span>
+          <div class="settings-text">
+            <div class="settings-name" id="txt-dark-mode">Dark Mode</div>
+            <div class="settings-sub" id="txt-dark-sub">रात को पढ़ने के लिए</div>
+          </div>
+          <div class="dark-toggle" onclick="toggleDarkMode()">
+            <div class="toggle-switch" id="dark-toggle-switch">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+        </div>
+        <div class="settings-item" onclick="changeMedium()">
+          <span class="settings-icon">🌐</span>
+          <div class="settings-text">
+            <div class="settings-name" id="txt-change-medium">Medium बदलो</div>
+            <div class="settings-sub" id="current-medium-display">हिंदी माध्यम</div>
+          </div>
+          <span class="settings-arrow">→</span>
+        </div>
+        <div class="settings-item" onclick="openBookmarks()">
+          <span class="settings-icon">🔖</span>
+          <div class="settings-text">
+            <div class="settings-name" id="txt-saved-content">Saved Content</div>
+            <div class="settings-sub" id="saved-count-display">0 items saved</div>
+          </div>
+          <span class="settings-arrow">→</span>
+        </div>
+        <div class="settings-item" onclick="clearAllData()">
+          <span class="settings-icon">🗑️</span>
+          <div class="settings-text">
+            <div class="settings-name" id="txt-clear-data">सब Clear करो</div>
+            <div class="settings-sub" id="txt-clear-sub">सभी saved data हटाओ</div>
+          </div>
+          <span class="settings-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="app-info">
+        <div class="app-info-logo">📚</div>
+        <div class="app-info-name">CG Pathshala</div>
+        <div class="app-info-version">Version 1.0.0</div>
+        <div class="app-info-sub">CG Board | कक्षा 6 से 12</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav" id="bottom-nav" style="display:none">
+    <button class="nav-btn" onclick="showScreen('home-screen')">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label" id="nav-home">होम</span>
+    </button>
+    <button class="nav-btn" onclick="showScreen('home-screen')">
+      <span class="nav-icon">📚</span>
+      <span class="nav-label" id="nav-classes">कक्षा</span>
+    </button>
+    <button class="nav-btn" onclick="openBookmarks()">
+      <span class="nav-icon">🔖</span>
+      <span class="nav-label" id="nav-bookmark">Saved</span>
+    </button>
+    <button class="nav-btn" onclick="openProfile()">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label" id="nav-profile">प्रोफाइल</span>
+    </button>
+  </div>
+
+  <!-- SHARE MODAL -->
+  <div class="modal-overlay" id="share-modal" onclick="closeShareModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-title" id="share-modal-title">📤 Share करो</div>
+      <div class="share-options">
+        <div class="share-option" onclick="shareWhatsApp()">
+          <div class="share-icon" style="background:#25D36615">💬</div>
+          <div class="share-label">WhatsApp</div>
+        </div>
+        <div class="share-option" onclick="shareTelegram()">
+          <div class="share-icon" style="background:#0088cc15">✈️</div>
+          <div class="share-label">Telegram</div>
+        </div>
+        <div class="share-option" onclick="copyLink()">
+          <div class="share-icon" style="background:#E5393515">🔗</div>
+          <div class="share-label" id="txt-copy-link">Link Copy करो</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeShareModal()" id="txt-share-close">बंद करो</button>
+    </div>
+  </div>
+
+  <!-- EDIT PROFILE MODAL -->
+  <div class="modal-overlay" id="edit-profile-modal" onclick="closeEditProfile()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-title">✏️ Profile Edit करो</div>
+      <div style="margin-bottom:14px">
+        <label style="font-size:13px;font-weight:700;color:#555;margin-bottom:6px;display:block">नाम / Name</label>
+        <input type="text" id="edit-name-input" placeholder="अपना नाम लिखो" style="width:100%;border:2px solid #eee;border-radius:10px;padding:10px 14px;font-size:14px;outline:none;font-family:'Segoe UI',sans-serif">
+      </div>
+      <div style="margin-bottom:20px">
+        <label style="font-size:13px;font-weight:700;color:#555;margin-bottom:6px;display:block">कक्षा / Class</label>
+        <select id="edit-class-input" style="width:100%;border:2px solid #eee;border-radius:10px;padding:10px 14px;font-size:14px;outline:none;font-family:'Segoe UI',sans-serif">
+          <option value="">-- चुनें --</option>
+          <option value="6">कक्षा 6</option>
+          <option value="7">कक्षा 7</option>
+          <option value="8">कक्षा 8</option>
+          <option value="9">कक्षा 9</option>
+          <option value="10">कक्षा 10</option>
+          <option value="11">कक्षा 11</option>
+          <option value="12">कक्षा 12</option>
+        </select>
+      </div>
+      <button onclick="saveProfile()" style="width:100%;padding:12px;border-radius:10px;font-size:15px;background:linear-gradient(135deg,#E53935,#B71C1C);color:white;border:none;font-weight:700;cursor:pointer;font-family:'Segoe UI',sans-serif">✅ Save करो</button>
+      <button class="modal-close" style="margin-top:10px" onclick="closeEditProfile()">बंद करो</button>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
