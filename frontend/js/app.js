@@ -1,4 +1,4 @@
-const API = 'http://localhost:5000/api';
+const API = 'https://cg-pathshala-production.up.railway.app/api';
 
 let selectedMedium = 'hindi';
 let selectedClass = null;
