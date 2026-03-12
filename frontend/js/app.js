@@ -294,12 +294,14 @@ async function loadContent(type, icon) {
       mcq: '#9C27B0', video: '#F44336', imp: '#FF9800'
     };
 
-    list.innerHTML = '';
-data.data.forEach(item => {
+   list.innerHTML = '';
+window._links = [];
+data.data.forEach((item, index) => {
+  window._links[index] = item.pdfUrl;
   const color = typeColors[item.contentType] || '#999';
   const isSaved = isBookmarked(item._id);
   list.innerHTML += `
-    <div class="list-item">
+   <div class="list-item" onclick="openPDF(${index})">
       <div class="item-icon" style="background:${color}15">${icon}</div>
       <div class="item-text">
         <h4>${item.title}</h4>
@@ -311,7 +313,7 @@ data.data.forEach(item => {
         📤
       </button>
       <button class="save-btn ${isSaved ? 'saved' : ''}"
-        onclick="toggleBookmark(event, '${item._id}', '${item.title}', '${item.contentType}', '${icon}', '${item.subject}', ${item.class}, ${item.chapter})"
+       onclick="toggleBookmark(event, '${item._id}', '${item.title}', '${item.contentType}', '${icon}', '${item.subject}', ${item.class}, ${item.chapter}, ${index})"
         title="${isSaved ? 'Saved!' : 'Save करो'}">
         ${isSaved ? '🔖' : '🏷️'}
       </button>
@@ -465,14 +467,14 @@ function isBookmarked(id) {
 }
 
 // Bookmark toggle करो
-function toggleBookmark(event, id, title, type, icon, subject, cls, chapter) {
+function toggleBookmark(event, id, title, type, icon, subject, cls, chapter, linkIndex) {
   event.stopPropagation();
   const bookmarks = getBookmarks();
   const index = bookmarks.findIndex(b => b.id === id);
 
   if (index === -1) {
     // Add bookmark
-    bookmarks.push({ id, title, type, icon, subject, class: cls, chapter, savedAt: new Date().toISOString() });
+    bookmarks.push({ id, title, type, icon, subject, class: cls, chapter, pdfUrl: window._links[linkIndex], savedAt: new Date().toISOString() });
     saveBookmarks(bookmarks);
     event.target.textContent = '🔖';
     event.target.classList.add('saved');
@@ -545,7 +547,7 @@ function filterBookmarks(type) {
       const chapterLabel = selectedMedium === 'hindi' ? `अध्याय ${item.chapter}` : `Chapter ${item.chapter}`;
 
       listEl.innerHTML += `
-        <div class="bookmark-item">
+        <div class="bookmark-item" onclick="openPDFFromBookmark('${item.pdfUrl}')">
           <div class="bm-icon" style="background:${color}15">${icon}</div>
           <div class="bm-text">
             <div class="bm-title">${item.title}</div>
@@ -760,3 +762,19 @@ function toggleDarkMode() {
 
 // App शुरू होते ही Dark Mode check करो
 initDarkMode();
+
+function openPDF(index) {
+  const url = window._links[index];
+  if (!url) {
+    showToast('❌ Link नहीं मिली!');
+    return;
+  }
+  Capacitor.Plugins.Browser.open({ url: url });
+}
+function openPDFFromBookmark(url) {
+  if (!url) {
+    showToast('❌ Link नहीं मिली!');
+    return;
+  }
+  Capacitor.Plugins.Browser.open({ url: url });
+}

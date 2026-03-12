@@ -1,5 +1,8 @@
 {
   "appId": "com.cgpathshala.app",
   "appName": "CG Pathshala",
-  "webDir": "frontend"
+  "webDir": "frontend",
+  "server": {
+    "allowNavigation": ["scert.cg.gov.in", "*"]
+  }
 }
