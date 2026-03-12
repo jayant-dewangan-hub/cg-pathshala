@@ -1,12 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config({ path: './backend/.env' });
 
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 app.use(express.json());
 
 // MongoDB Connect
