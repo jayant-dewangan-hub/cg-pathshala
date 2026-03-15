@@ -958,12 +958,25 @@ body.dark .section-title-plain { color: #f0f0f0; }
 }
 
 .toggle-switch.on .toggle-knob { left: 23px; }
-/* PDF VIEWER */
 #pdf-screen {
   display: none;
   flex-direction: column;
   height: 100vh;
   width: 100%;
+}
+#pdf-screen {
+  display: none;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 500;
+  background: white;
+  margin: 0;
 }
 #pdf-screen.active {
   display: flex;

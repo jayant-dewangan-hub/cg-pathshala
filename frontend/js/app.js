@@ -802,9 +802,9 @@ function closePDF() {
   document.getElementById('pdf-iframe').src = '';
   document.getElementById('main-header').style.display = 'block';
   document.getElementById('bottom-nav').style.display = 'flex';
+  document.body.style.overflow = '';
   showScreen('section-screen');
 }
-
 function openPDFFromBookmark(url) {
   if (!url) {
     showToast('❌ Link नहीं मिली!');

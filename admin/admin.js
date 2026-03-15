@@ -89,9 +89,9 @@ function updateMcqSubjects() {
 // ===== UPDATE FORM FIELDS =====
 function updateFormFields() {
   const type = document.getElementById('f-type').value;
-  document.getElementById('field-content').style.display = (type === 'notes' || type === 'imp') ? 'block' : 'none';
+  document.getElementById('field-content').style.display = 'none';
   document.getElementById('field-video').style.display = (type === 'video') ? 'block' : 'none';
-  document.getElementById('field-pdf').style.display = (type === 'pdf' || type === 'pyq') ? 'block' : 'none';
+  document.getElementById('field-pdf').style.display = (type === 'pdf' || type === 'pyq' || type === 'notes' || type === 'imp') ? 'block' : 'none';
 }
 
 // ===== ADD CONTENT =====
