@@ -131,7 +131,7 @@ function chooseMedium(med) {
   const t = txt[med];
    renderClasses();
   showScreen('home-screen');
-}
+
 
   // Header update
   document.getElementById('main-header').style.display = 'block';
@@ -149,6 +149,7 @@ function chooseMedium(med) {
   // Render classes
   renderClasses();
   showScreen('home-screen');
+}
 
 // ===== RENDER CLASSES =====
 function renderClasses() {
