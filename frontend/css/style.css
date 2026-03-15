@@ -958,3 +958,44 @@ body.dark .section-title-plain { color: #f0f0f0; }
 }
 
 .toggle-switch.on .toggle-knob { left: 23px; }
+/* PDF VIEWER */
+#pdf-screen {
+  display: none;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+#pdf-screen.active {
+  display: flex;
+}
+.pdf-header {
+  background: #c0392b;
+  color: white;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 50px;
+}
+.pdf-back-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+#pdf-title {
+  font-size: 15px;
+  font-weight: bold;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#pdf-iframe {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+}

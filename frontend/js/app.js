@@ -296,8 +296,10 @@ async function loadContent(type, icon) {
 
    list.innerHTML = '';
 window._links = [];
+window._titles = [];
 data.data.forEach((item, index) => {
   window._links[index] = item.pdfUrl;
+  window._titles[index] = item.title;
   const color = typeColors[item.contentType] || '#999';
   const isSaved = isBookmarked(item._id);
   list.innerHTML += `
@@ -617,17 +619,21 @@ function openShareModal(title, subject, cls, chapter) {
 function closeShareModal() {
   document.getElementById('share-modal').classList.remove('active');
 }
-
 function shareWhatsApp() {
-  const text = encodeURIComponent(`${shareData.text}\n${shareData.url}`);
-  window.open(`https://wa.me/?text=${text}`, '_blank');
+  Capacitor.Plugins.Share.share({
+    title: shareData.title,
+    text: `${shareData.text}\n${shareData.url}`,
+    dialogTitle: 'Share via WhatsApp'
+  });
   closeShareModal();
 }
 
 function shareTelegram() {
-  const text = encodeURIComponent(shareData.text);
-  const url = encodeURIComponent(shareData.url);
-  window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
+  Capacitor.Plugins.Share.share({
+    title: shareData.title,
+    text: `${shareData.text}\n${shareData.url}`,
+    dialogTitle: 'Share via Telegram'
+  });
   closeShareModal();
 }
 
@@ -765,16 +771,32 @@ initDarkMode();
 
 function openPDF(index) {
   const url = window._links[index];
+  const title = window._titles ? window._titles[index] : 'PDF';
   if (!url) {
     showToast('❌ Link नहीं मिली!');
     return;
   }
-  Capacitor.Plugins.Browser.open({ url: url });
+  
+  // Google Drive/Docs link को embed URL में बदलो
+  let embedUrl = url;
+  if (url.includes('docs.google.com/document')) {
+    const id = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (id) embedUrl = `https://docs.google.com/document/d/${id[1]}/preview`;
+  } else if (url.includes('drive.google.com')) {
+    const id = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (id) embedUrl = `https://drive.google.com/file/d/${id[1]}/preview`;
+  }
+  
+  document.getElementById('pdf-title').textContent = title;
+  document.getElementById('pdf-iframe').src = embedUrl;
+  document.getElementById('main-header').style.display = 'none';
+  document.getElementById('bottom-nav').style.display = 'none';
+  showScreen('pdf-screen');
 }
-function openPDFFromBookmark(url) {
-  if (!url) {
-    showToast('❌ Link नहीं मिली!');
-    return;
-  }
-  Capacitor.Plugins.Browser.open({ url: url });
+
+function closePDF() {
+  document.getElementById('pdf-iframe').src = '';
+  document.getElementById('main-header').style.display = 'block';
+  document.getElementById('bottom-nav').style.display = 'flex';
+  showScreen('section-screen');
 }

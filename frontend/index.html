@@ -201,6 +201,14 @@
 
     </div>
   </div>
+  <!-- PDF VIEWER SCREEN -->
+<div class="screen" id="pdf-screen">
+  <div class="pdf-header">
+    <button onclick="closePDF()" class="pdf-back-btn">← वापस</button>
+    <span id="pdf-title">PDF</span>
+  </div>
+  <iframe id="pdf-iframe" src="" frameborder="0" allowfullscreen></iframe>
+</div>
 
   <!-- BOTTOM NAV -->
   <div class="bottom-nav" id="bottom-nav" style="display:none">
@@ -269,6 +277,7 @@
       <button class="modal-close" style="margin-top:10px" onclick="closeEditProfile()">बंद करो</button>
     </div>
   </div>
+  
 
   <script src="js/app.js"></script>
 </body>
