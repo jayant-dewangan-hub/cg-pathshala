@@ -129,6 +129,9 @@ function showScreen(id) {
 function chooseMedium(med) {
   selectedMedium = med;
   const t = txt[med];
+   renderClasses();
+  showScreen('home-screen');
+}
 
   // Header update
   document.getElementById('main-header').style.display = 'block';
@@ -146,7 +149,6 @@ function chooseMedium(med) {
   // Render classes
   renderClasses();
   showScreen('home-screen');
-}
 
 // ===== RENDER CLASSES =====
 function renderClasses() {
@@ -243,9 +245,17 @@ function selectSubject(sub) {
       <div class="sic-sub">${classLabel} • ${medLabel}</div>
     </div>`;
 
-  document.getElementById('txt-what-to-read').textContent = t.whatToRead;
+ document.getElementById('txt-what-to-read').textContent = t.whatToRead;
   renderContentTypes();
   showScreen('content-screen');
+}
+
+// ===== SELECT CONTENT TYPE =====
+async function selectContentType(type, label, icon) {
+  selectedContentType = type;
+  document.getElementById('section-title').textContent = label;
+  showScreen('section-screen');
+  await loadContent(type, icon);
 }
 
 // ===== RENDER CONTENT TYPES =====
@@ -261,14 +271,6 @@ function renderContentTypes() {
         <div class="ct-sub">${ct.sub}</div>
       </div>`;
   });
-}
-
-// ===== SELECT CONTENT TYPE =====
-async function selectContentType(type, label, icon) {
-  selectedContentType = type;
-  document.getElementById('section-title').textContent = label;
-  showScreen('section-screen');
-  await loadContent(type, icon);
 }
 
 async function loadContent(type, icon) {
@@ -294,34 +296,35 @@ async function loadContent(type, icon) {
       mcq: '#9C27B0', video: '#F44336', imp: '#FF9800'
     };
 
-   list.innerHTML = '';
-window._links = [];
-window._titles = [];
-data.data.forEach((item, index) => {
-  window._links[index] = item.pdfUrl;
-  window._titles[index] = item.title;
-  const color = typeColors[item.contentType] || '#999';
-  const isSaved = isBookmarked(item._id);
-  list.innerHTML += `
-   <div class="list-item" onclick="openPDF(${index})">
-      <div class="item-icon" style="background:${color}15">${icon}</div>
-      <div class="item-text">
-        <h4>${item.title}</h4>
-        <p>${t.chapterLabel} ${item.chapter} • ${item.chapterName}</p>
-      </div>
-      <button class="share-btn"
-        onclick="openShareModal('${item.title}', '${item.subject}', ${item.class}, ${item.chapter})"
-        title="Share">
-        📤
-      </button>
-      <button class="save-btn ${isSaved ? 'saved' : ''}"
-       onclick="toggleBookmark(event, '${item._id}', '${item.title}', '${item.contentType}', '${icon}', '${item.subject}', ${item.class}, ${item.chapter}, ${index})"
-        title="${isSaved ? 'Saved!' : 'Save करो'}">
-        ${isSaved ? '🔖' : '🏷️'}
-      </button>
-      <div class="item-arrow">→</div>
-    </div>`;
-});
+    list.innerHTML = '';
+    window._links = [];
+    window._titles = [];
+    data.data.forEach((item, index) => {
+      window._links[index] = item.pdfUrl;
+      window._titles[index] = item.title;
+      const color = typeColors[item.contentType] || '#999';
+      const isSaved = isBookmarked(item._id);
+      
+      list.innerHTML += `
+        <div class="list-item" onclick="openPDF(${index})">
+          <div class="item-icon" style="background:${color}15">${icon}</div>
+          <div class="item-text">
+            <h4>${item.title}</h4>
+            <p>${t.chapterLabel} ${item.chapter} • ${item.chapterName}</p>
+          </div>
+          <button class="share-btn"
+            onclick="openShareModal('${item.title}', '${item.subject}', ${item.class}, ${item.chapter})"
+            title="Share">
+            📤
+          </button>
+          <button class="save-btn ${isSaved ? 'saved' : ''}"
+            onclick="toggleBookmark(event, '${item._id}', '${item.title}', '${item.contentType}', '${icon}', '${item.subject}', ${item.class}, ${item.chapter}, ${index})"
+            title="${isSaved ? 'Saved!' : 'Save करो'}">
+            ${isSaved ? '🔖' : '🏷️'}
+          </button>
+          <div class="item-arrow">→</div>
+        </div>`;
+    });
   } catch (err) {
     list.innerHTML = `<p style="text-align:center;color:red;margin-top:20px">Error loading content!</p>`;
   }
@@ -651,7 +654,7 @@ function openProfile() {
   const t = txt[selectedMedium];
   const profile = getProfile();
   const bookmarks = getBookmarks();
-
+  
   // Text update
   document.getElementById('txt-profile-title').textContent =
     selectedMedium === 'hindi' ? '👤 प्रोफाइल' : '👤 Profile';
@@ -799,4 +802,26 @@ function closePDF() {
   document.getElementById('main-header').style.display = 'block';
   document.getElementById('bottom-nav').style.display = 'flex';
   showScreen('section-screen');
+}
+
+function openPDFFromBookmark(url) {
+  if (!url) {
+    showToast('❌ Link नहीं मिली!');
+    return;
+  }
+
+  let embedUrl = url;
+  if (url.includes('docs.google.com/document')) {
+    const id = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (id) embedUrl = `https://docs.google.com/document/d/${id[1]}/preview`;
+  } else if (url.includes('drive.google.com')) {
+    const id = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (id) embedUrl = `https://drive.google.com/file/d/${id[1]}/preview`;
+  }
+
+  document.getElementById('pdf-title').textContent = 'PDF';
+  document.getElementById('pdf-iframe').src = embedUrl;
+  document.getElementById('main-header').style.display = 'none';
+  document.getElementById('bottom-nav').style.display = 'none';
+  showScreen('pdf-screen');
 }

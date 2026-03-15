@@ -4,5 +4,13 @@
   "webDir": "frontend",
   "server": {
     "allowNavigation": ["scert.cg.gov.in", "*"]
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#c0392b",
+      "showSpinner": false,
+      "androidSplashResourceName": "splash"
+    }
   }
 }
