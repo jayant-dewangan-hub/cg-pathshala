@@ -2,6 +2,15 @@ const express = require('express');
 const router = express.Router();
 const Content = require('../models/Content');
 
+// Admin Key Check
+function checkAdminKey(req, res, next) {
+  const adminKey = req.headers['x-admin-key'];
+  if (adminKey !== process.env.ADMIN_KEY) {
+    return res.status(401).json({ success: false, error: 'Unauthorized' });
+  }
+  next();
+}
+
 // सभी content लाओ
 router.get('/', async (req, res) => {
   try {
@@ -21,7 +30,7 @@ router.get('/', async (req, res) => {
 });
 
 // नया content add करो
-router.post('/', async (req, res) => {
+router.post('/', checkAdminKey, async (req, res) => {
   try {
     const content = new Content(req.body);
     await content.save();
@@ -32,7 +41,7 @@ router.post('/', async (req, res) => {
 });
 
 // content delete करो
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', checkAdminKey, async (req, res) => {
   try {
     await Content.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: 'Deleted!' });
@@ -40,27 +49,7 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 });
-// Search Route
-router.get('/search', async (req, res) => {
-  try {
-    const { q, medium } = req.query;
-    if (!q) return res.json({ success: true, data: [] });
 
-    const results = await Content.find({
-      medium: medium || 'hindi',
-      $or: [
-        { title: { $regex: q, $options: 'i' } },
-        { chapterName: { $regex: q, $options: 'i' } },
-        { subject: { $regex: q, $options: 'i' } },
-        { content: { $regex: q, $options: 'i' } },
-      ]
-    }).limit(20);
-
-    res.json({ success: true, data: results });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
 // Search Route
 router.get('/search', async (req, res) => {
   try {

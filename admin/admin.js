@@ -116,11 +116,14 @@ async function addContent() {
   const body = { medium, class: parseInt(cls), subject, contentType: type, chapter: parseInt(chapter), chapterName, title, content, videoUrl, pdfUrl };
 
   try {
-    const res = await fetch(`${API}/content`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+   const res = await fetch(`${API}/content`, {
+  method: 'POST',
+  headers: { 
+    'Content-Type': 'application/json',
+    'x-admin-key': 'Jay2026Secret'
+  },
+  body: JSON.stringify(body)
+});
     const data = await res.json();
     if (data.success) {
       showMsg(msgEl, '✅ Content successfully save हो गया!', 'success');
@@ -166,11 +169,14 @@ async function addMCQ() {
   };
 
   try {
-    const res = await fetch(`${API}/content`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+   const res = await fetch(`${API}/content`, {
+  method: 'POST',
+  headers: { 
+    'Content-Type': 'application/json',
+    'x-admin-key': 'Jay2026Secret'
+  },
+  body: JSON.stringify(body)
+});
     const data = await res.json();
     if (data.success) {
       showMsg(msgEl, '✅ MCQ successfully save हो गया!', 'success');
@@ -241,7 +247,10 @@ async function loadContentList() {
 async function deleteContent(id) {
   if (!confirm('क्या सच में delete करना है?')) return;
   try {
-    const res = await fetch(`${API}/content/${id}`, { method: 'DELETE' });
+   const res = await fetch(`${API}/content/${id}`, { 
+  method: 'DELETE',
+  headers: { 'x-admin-key': 'Jay2026Secret' }
+});
     const data = await res.json();
     if (data.success) loadContentList();
   } catch (err) {
