@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config({ path: './backend/.env' });
+require('dotenv').config();
 
 const app = express();
 
@@ -12,7 +12,7 @@ app.use(cors({
 app.use(express.json());
 
 // MongoDB Connect
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect("mongodb+srv://cgpathshala:TNAYAJ1807@cluster0.st0k5g1.mongodb.net/cgpathshala?appName=Cluster0")
 .then(() => console.log('✅ MongoDB Connected!'))
 .catch((err) => console.log('❌ Error:', err));
 
@@ -30,3 +30,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+console.log("ENV CHECK:", process.env.MONGODB_URI);
+console.log("URI CHECK:", process.env.MONGODB_URI);

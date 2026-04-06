@@ -826,3 +826,24 @@ function openPDFFromBookmark(url) {
   document.getElementById('bottom-nav').style.display = 'none';
   showScreen('pdf-screen');
 }
+// ===== ANDROID BACK BUTTON =====
+window.handleBackButton = function() {
+  const screens = ['section-screen', 'content-screen', 'subject-screen', 
+                   'stream-screen', 'search-screen', 'bookmark-screen', 
+                   'profile-screen', 'pdf-screen'];
+  
+  for (let screen of screens) {
+    const el = document.getElementById(screen);
+    if (el && el.classList.contains('active')) {
+      if (screen === 'pdf-screen') closePDF();
+      else if (screen === 'section-screen') goBack('section');
+      else if (screen === 'content-screen') goBack('content');
+      else if (screen === 'subject-screen') goBack('subject');
+      else if (screen === 'stream-screen') goBack('stream');
+      else if (screen === 'search-screen') goBack('search');
+      else if (screen === 'bookmark-screen') showScreen('home-screen');
+      else if (screen === 'profile-screen') showScreen('home-screen');
+      return;
+    }
+  }
+};
