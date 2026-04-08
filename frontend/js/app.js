@@ -846,4 +846,10 @@ window.handleBackButton = function() {
       return;
     }
   }
+  
+  // Home screen पर है तो app बंद करो
+  if (document.getElementById('home-screen').classList.contains('active')) {
+    navigator.app ? navigator.app.exitApp() : 
+    getBridge ? getBridge().triggerWindowJSEvent('backbutton') : null;
+  }
 };
