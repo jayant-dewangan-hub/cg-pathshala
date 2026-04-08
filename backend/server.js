@@ -12,6 +12,7 @@ app.use(cors({
 app.use(express.json());
 
 // MongoDB Connect
+const PORT = process.env.PORT || 5000;
 const startServer = async () => {
   try {
    await mongoose.connect("mongodb+srv://cgpathshala:Jay12345@cluster0.st0k5g1.mongodb.net/cgpathshala?retryWrites=true&w=majority");
