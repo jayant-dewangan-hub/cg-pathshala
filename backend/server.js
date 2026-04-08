@@ -14,7 +14,7 @@ app.use(express.json());
 // MongoDB Connect
 const startServer = async () => {
   try {
-    await mongoose.connect("mongodb+srv://cgpathshala:TNAYAJ1807@cluster0.st0k5g1.mongodb.net/cgpathshala?appName=Cluster0");
+   await mongoose.connect("mongodb+srv://cgpathshala:Jay12345@cluster0.st0k5g1.mongodb.net/cgpathshala?retryWrites=true&w=majority");
 
     console.log('✅ MongoDB Connected!');
 
