@@ -12,6 +12,19 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// ===== ADMIN KEY BYPASS - WORKING VERSION =====
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/content')) {
+    const adminKey = req.headers['x-admin-key'];
+    if (adminKey === 'Jay2026Secret') {
+      console.log('🔑 Admin bypass successful!');
+      req.user = { username: 'admin' };
+      return next();
+    }
+  }
+  next();
+});
+
 // ========== MONGODB SCHEMAS ==========
 const contentSchema = new mongoose.Schema({
   title: String,
