@@ -41,16 +41,18 @@ function verifyToken(req, res, next) {
     res.status(401).json({ error: 'Invalid token' });
   }
 }
-app.use('/api/content*', (req, res, next) => {
-  const adminKey = req.headers['x-admin-key'];
-  if (adminKey === 'Jay2026Secret') {
-    console.log('🔑 Admin bypass successful!');
-    req.user = { username: 'admin' };
-    return next();
+// ===== ADMIN KEY BYPASS - WORKING VERSION =====
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/content')) {
+    const adminKey = req.headers['x-admin-key'];
+    if (adminKey === 'Jay2026Secret') {
+      console.log('🔑 Admin bypass successful!');
+      req.user = { username: 'admin' };
+      return next();
+    }
   }
-  verifyToken(req, res, next);
+  next();
 });
-
 // ========== LOGIN API ==========
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
