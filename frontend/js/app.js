@@ -782,13 +782,15 @@ function openPDF(index) {
   }
   
   // Google Drive/Docs link को embed URL में बदलो
-  let embedUrl = url;
+let embedUrl = url;
   if (url.includes('docs.google.com/document')) {
     const id = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
     if (id) embedUrl = `https://docs.google.com/document/d/${id[1]}/preview`;
   } else if (url.includes('drive.google.com')) {
     const id = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
     if (id) embedUrl = `https://drive.google.com/file/d/${id[1]}/preview`;
+  } else {
+    embedUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
   }
   
   document.getElementById('pdf-title').textContent = title;
@@ -811,15 +813,16 @@ function openPDFFromBookmark(url) {
     return;
   }
 
-  let embedUrl = url;
+let embedUrl = url;
   if (url.includes('docs.google.com/document')) {
     const id = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
     if (id) embedUrl = `https://docs.google.com/document/d/${id[1]}/preview`;
   } else if (url.includes('drive.google.com')) {
     const id = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
     if (id) embedUrl = `https://drive.google.com/file/d/${id[1]}/preview`;
+  } else {
+    embedUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
   }
-
   document.getElementById('pdf-title').textContent = 'PDF';
   document.getElementById('pdf-iframe').src = embedUrl;
   document.getElementById('main-header').style.display = 'none';
